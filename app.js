@@ -11,10 +11,11 @@ app.get("/", function(req,res){
 });
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended:true}));
-app.post("/", function(req,res){
+app.post("/", function(req, res) {
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
     const email = req.body.email;
+
     const data = {
         members:[
             {
@@ -27,18 +28,27 @@ app.post("/", function(req,res){
             }
         ]
     };
+
     const jsonData = JSON.stringify(data);
-    const url =  "https://server.api.mailchimp.com/3.0/lists/9604759901";
+
+    const url =  "https://us2.api.mailchimp.com/3.0/lists/9604759901";
     const options = {
-        method: "post",
+        method: "POST",
         auth: "lena1732:0a17f4e95646a7337462bc85e99c1fa2-us2"
     }
-    https.request(url, options, function(response){
+
+    const request = https.request(url, options, function(response) {
         response.on("data", function(data){
-            
+            console.log("========================")
+            console.log(JSON.parse(data))
+            console.log("========================")
         })
     })
+
+    request.write(jsonData);
+    request.end();
 });
+
 app.listen(port,function(){
     console.log("server is running on 3000");
 });
