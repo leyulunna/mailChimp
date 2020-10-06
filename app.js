@@ -42,6 +42,13 @@ app.post("/", function(req, res) {
             console.log("========================")
             console.log(JSON.parse(data))
             console.log("========================")
+            const statusCode = Number(response.statusCode);
+            if(statusCode === 200){
+                res.sendFile(__dirname+"/success.html");
+            }else{
+                res.sendFile(__dirname+"/failure.html");
+            }
+
         })
     })
 
@@ -49,7 +56,11 @@ app.post("/", function(req, res) {
     request.end();
 });
 
-app.listen(port,function(){
+app.post("/failure", function(req,res){
+    res.redirect("/");
+});
+
+app.listen(process.env.PORT || 3000,function(){
     console.log("server is running on 3000");
 });
 
